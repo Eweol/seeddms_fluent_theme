@@ -61,12 +61,12 @@ class SeedDMS_Theme_Style extends SeedDMS_View_Common {
 			 * 'worker-src blob:' is needed for cytoscape
 			 */
 			$csp_rules = [];
-			$csp_rule = "script-src *.unimain.de *.jsdelivr.net 'sha256-XcW/a8GYyYhAD7ADADI8lHnKy+SMIVFRB9HoyeRc2c8=' 'self' 'unsafe-eval'";
+			$csp_rule = "script-src *.jsdelivr.net 'self' 'unsafe-eval'";
 			if($this->nonces) {
 				$csp_rule .= " 'nonce-".implode("' 'nonce-", $this->nonces)."'";
 			}
 			$csp_rules[] = $csp_rule;
-			$csp_rules[] = "worker-src *.unimain.de blob:";
+			$csp_rules[] = "worker-src blob:";
 			//$csp_rules[] = "style-src 'self'";
 			/* Do not allow to embed myself into frames on foreigns pages */
 			$csp_rules[] = "frame-ancestors 'self'";
@@ -142,8 +142,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		echo "<title>".(strlen($sitename)>0 ? $sitename : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "<script type='module' src='https://cdn.jsdelivr.net/npm/@fluentui/web-components/dist/web-components.min.js'></script>";
-		echo "<link rel='manifest' href='/manifest.webmanifest'>";
-		echo "<script>navigator.serviceWorker.register('/serviceWorker.js')</script>";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
