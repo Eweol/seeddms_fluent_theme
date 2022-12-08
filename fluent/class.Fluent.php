@@ -61,12 +61,12 @@ class SeedDMS_Theme_Style extends SeedDMS_View_Common {
 			 * 'worker-src blob:' is needed for cytoscape
 			 */
 			$csp_rules = [];
-			$csp_rule = "script-src *.jsdelivr.net 'self' 'unsafe-eval'";
+			$csp_rule = "script-src *.unimain.de *.jsdelivr.net 'sha256-XcW/a8GYyYhAD7ADADI8lHnKy+SMIVFRB9HoyeRc2c8=' 'self' 'unsafe-eval'";
 			if($this->nonces) {
 				$csp_rule .= " 'nonce-".implode("' 'nonce-", $this->nonces)."'";
 			}
 			$csp_rules[] = $csp_rule;
-			$csp_rules[] = "worker-src blob:";
+			$csp_rules[] = "worker-src *.unimain.de blob:";
 			//$csp_rules[] = "style-src 'self'";
 			/* Do not allow to embed myself into frames on foreigns pages */
 			$csp_rules[] = "frame-ancestors 'self'";
@@ -142,6 +142,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 		echo "<title>".(strlen($sitename)>0 ? $sitename : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "<script type='module' src='https://cdn.jsdelivr.net/npm/@fluentui/web-components/dist/web-components.min.js'></script>";
+		echo "<link rel='manifest' href='/manifest.webmanifest'>";
+		echo "<script>navigator.serviceWorker.register('/serviceWorker.js')</script>";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
@@ -1255,19 +1257,19 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function formSubmit($value, $name='', $target='', $type='primary') { /* {{{ */
 		switch($type) {
 		case 'danger':
-			$class = 'btn-danger';
+			$class = 'neutral';
 			break;
 		case 'primary':
 		default:
-			$class = 'btn-primary';
+			$class = 'accent';
 		}
 //		echo "<div class=\"controls\">\n";
 		if(is_string($value)) {
-			echo "<button type=\"submit\" class=\"btn ".$class."\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').($target ? ' formtarget="'.$target.'"' : '').">".$value."</button>\n";
+			echo "<fluent-button type=\"submit\" appearance=\"$class\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').($target ? ' formtarget="'.$target.'"' : '').">".$value."</button>\n";
 		} else {
 			if(is_array($value)) {
 				foreach($value as $i=>$v)
-					echo "<button type=\"submit\" class=\"btn ".$class."\"".(!empty($name[$i]) ? ' name="'.$name[$i].'" id="'.$name[$i].'"' : '').(!empty($target[$i]) ? ' formtarget="'.$name[$i].'"' : '').">".$v."</button>\n";
+					echo "<fluent-button type=\"submit\" appearance=\"$class\"".(!empty($name[$i]) ? ' name="'.$name[$i].'" id="'.$name[$i].'"' : '').(!empty($target[$i]) ? ' formtarget="'.$name[$i].'"' : '').">".$v."</button>\n";
 			}
 		}
 //		echo "</div>\n";
@@ -1348,13 +1350,13 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$icons["sxm"]  = "ooo_formula.png";
 		$icons["smf"]  = "ooo_formula.png";
 		$icons["mml"]  = "ooo_formula.png";
-		$icons["folder"]  = "icons/folder_24_regular.svg";
+		$icons["folder"]  = "folder_24_regular.svg";
 
 		$icons["default"] = "text-x-preview.svg"; //"default.png";
 
 		$ext = strtolower(substr($fileType, 1));
 		if (isset($icons[$ext])) {
-			return $this->imgpath.$icons[$ext];
+			return $this->iconpath.$icons[$ext];
 		}
 		else {
 			return $this->imgpath.$icons["default"];
@@ -3250,7 +3252,7 @@ $('body').on('click', '[id^=\"table-row-folder\"] td:nth-child(2)', function(ev)
 			if($ec = $this->callHook('documentListRowExtraContent', $document, $latestContent))
 				$extracontent = array_merge($extracontent, $ec);
 
-			$content .= "<td>";
+			$content .= "<td style=\"text-align: center; vertical-align: middle;\">";
 			if (file_exists($dms->contentDir . $latestContent->getPath())) {
 				$previewhtml = $this->callHook('documentListPreview', $previewer, $document, $latestContent);
 				if(is_string($previewhtml))
@@ -3270,7 +3272,7 @@ $('body').on('click', '[id^=\"table-row-folder\"] td:nth-child(2)', function(ev)
 				$content .= "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 			$content .= "</td>";
 
-			$content .= "<td class=\"wordbreak\"".($onepage ? ' style="cursor: pointer;"' : '').">";
+			$content .= "<td class=\"wordbreak\" style=\"".($onepage ? 'cursor: pointer;' : '')." vertical-align: middle;\">";
 			if($onepage)
 				$content .= "<b".($onepage ? ' title="Id:'.$document->getId().'"' : '').">".htmlspecialchars($document->getName()) . "</b>";
 			else
