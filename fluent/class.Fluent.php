@@ -1257,19 +1257,26 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function formSubmit($value, $name='', $target='', $type='primary') { /* {{{ */
 		switch($type) {
 		case 'danger':
-			$class = 'neutral';
+			$appearance = 'outline';
+			$backgroud= 'background: red;';
+			break;
+		case 'secondary':
+			$appearance = 'neutral';
+			break;	
+		case 'neutral':
+			$appearance = 'neutral';
 			break;
 		case 'primary':
 		default:
-			$class = 'accent';
+			$appearance = 'accent';
 		}
 //		echo "<div class=\"controls\">\n";
 		if(is_string($value)) {
-			echo "<fluent-button type=\"submit\" appearance=\"$class\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').($target ? ' formtarget="'.$target.'"' : '').">".$value."</button>\n";
+			echo "<fluent-button style=\"" . $backgroud . "\" type=\"submit\" appearance=\"$appearance\"".($name ? ' name="'.$name.'" id="'.$name.'"' : '').($target ? ' formtarget="'.$target.'"' : '').">".$value."</button>\n";
 		} else {
 			if(is_array($value)) {
 				foreach($value as $i=>$v)
-					echo "<fluent-button type=\"submit\" appearance=\"$class\"".(!empty($name[$i]) ? ' name="'.$name[$i].'" id="'.$name[$i].'"' : '').(!empty($target[$i]) ? ' formtarget="'.$name[$i].'"' : '').">".$v."</button>\n";
+					echo "<fluent-button style=\"" . $backgroud . "\" type=\"submit\" appearance=\"$appearance\"".(!empty($name[$i]) ? ' name="'.$name[$i].'" id="'.$name[$i].'"' : '').(!empty($target[$i]) ? ' formtarget="'.$name[$i].'"' : '').">".$v."</button>\n";
 			}
 		}
 //		echo "</div>\n";
