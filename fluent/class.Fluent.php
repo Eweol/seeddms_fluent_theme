@@ -35,7 +35,7 @@ class SeedDMS_Theme_Style extends SeedDMS_View_Common {
 		$this->extraheader = array('js'=>'', 'css'=>'', 'favicon'=>'', 'logo'=>'', 'logolink'=>'');
 		$this->footerjs = array();
 		$this->nonces = array();
-		$this->iconpath = $this->imgpath.'icons/';
+		$this->iconpath = $this->imgpath.'icons/ic_fluent_';
 	}
 
 	/**
